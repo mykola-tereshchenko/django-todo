@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Task
 
 
@@ -10,17 +11,26 @@ def index(request):
     return render(request, 'index.html')
 
 
-class TaskList(ListView):
+class TaskList(LoginRequiredMixin, ListView):
     model = Task
     context_object_name = 'tasks'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tasks'] = context['tasks'].filter(user=self.request.user)
+        return context
 
-class TaskDetail(DetailView):
+
+class TaskDetail(LoginRequiredMixin, DetailView):
     model = Task
     context_object_name = 'tasks'
 
+    def get_queryset(self):
+        base_qs = super(TaskDetail, self).get_queryset()
+        return base_qs.filter(user=self.request.user)
 
-class TaskCreate(CreateView):
+
+class TaskCreate(LoginRequiredMixin, CreateView):
     model = Task
     fields = ['title', 'description', 'completed']
     success_url = reverse_lazy('tasks')
@@ -31,7 +41,7 @@ class TaskCreate(CreateView):
         return super(TaskCreate, self).form_valid(form)
 
 
-class TaskUpdate(UpdateView):
+class TaskUpdate(LoginRequiredMixin, UpdateView):
     model = Task
     fields = ['title', 'description', 'completed']
     success_url = reverse_lazy('tasks')
@@ -40,8 +50,12 @@ class TaskUpdate(UpdateView):
         messages.success(self.request, "The task was updated successfully.")
         return super(TaskUpdate, self).form_valid(form)
 
+    def get_queryset(self):
+        base_qs = super(TaskUpdate, self).get_queryset()
+        return base_qs.filter(user=self.request.user)
 
-class TaskDelete(DeleteView):
+
+class TaskDelete(LoginRequiredMixin, DeleteView):
     model = Task
     context_object_name = 'task'
     success_url = reverse_lazy('tasks')
@@ -49,3 +63,7 @@ class TaskDelete(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, "The task was deleted successfully.")
         return super(TaskDelete, self).form_valid(form)
+
+    def get_queryset(self):
+        base_qs = super(TaskDelete, self).get_queryset()
+        return base_qs.filter(user=self.request.user)
