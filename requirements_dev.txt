@@ -1,0 +1,4 @@
+﻿-r requirements.txt
+
+# Test modulse
+pytest>=4.2.0
