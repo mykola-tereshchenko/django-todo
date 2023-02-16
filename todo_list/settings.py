@@ -127,4 +127,14 @@ STATICFILES_DIRS = [BASE_DIR / 'static/']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Login form
 LOGIN_URL = 'login'
+
+# eMail config
+# By using this setting, Django will output all emails to the console (Shell) instead of sending them.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_PORT = 25
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your_gmail_account@gmail.com'
+# EMAIL_HOST_PASSWORD = 'your_gmail_password'
