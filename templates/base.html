@@ -1,33 +1,48 @@
 <!DOCTYPE html>
-{%load static %}
-
+{% load static %}
 <html lang="en">
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-        <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
         <title>Todo List</title>
     </head>
 
     <body>
+
         <header class="header">
             <div class="container">
-                <h1><a href="#">To Do List</a></h1>
+            	<a href="{% url 'index' %}" class="logo">Todo</a>
+                <nav class="nav">
+                	<a href="{% url 'index' %}"><i class="bi bi-house-fill"></i> Home</a>
+                	<a href="{% url 'tasks' %}"><i class="bi bi-list-task"></i> My Tasks</a>
+                    <a href="{% url 'task-create' %}"><i class="bi bi-plus-circle"></i> Create Task</a>
+                </nav>
             </div>
         </header>
+
         <main>
             <div class="container">
-                {%block content%}
-                {%endblock content%}
+
+                {% if messages %}
+				{% for message in messages %}
+					<div class="alert alert-{{ message.tags }}">
+					       {{ message }}
+					     </div>
+					   {% endfor %}
+				{% endif %}
+
+             {% block content %}
+             {% endblock content %}
             </div>
         </main>
+
         <footer class="footer">
             <div class="container">
-               <p>&copy; Copyright {% now "Y" %}</p>
+               <p>© Copyright {% now "Y" %}</a></p>
             </div>
         </footer>
-    </body>
 
+    </body>
 </html>
