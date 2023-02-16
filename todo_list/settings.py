@@ -138,3 +138,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'your_gmail_account@gmail.com'
 # EMAIL_HOST_PASSWORD = 'your_gmail_password'
+
+# Media folder
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
